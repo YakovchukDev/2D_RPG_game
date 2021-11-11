@@ -8,8 +8,10 @@ public class PlayerController : MonoBehaviour
     public float Speed;
     public float JumpPower;
     public bool isGround;
-    public List<Toggle> toggleList;
     public Collider2D Platform;
+
+    [Header("Animation")]
+    public Animator animator;
 
     private new Rigidbody2D rigidbody2D;
     private new Transform transform;
@@ -34,44 +36,41 @@ public class PlayerController : MonoBehaviour
 
         if(horizontal < 0)
         {
+            animator.SetBool("IsRun", true);
             spriteRenderer.flipX = true;
         }
         else if(horizontal > 0)
         {
+            animator.SetBool("IsRun", true);
             spriteRenderer.flipX = false;
         }
+        else if(horizontal == 0)
+        {
+            animator.SetBool("IsRun", false);
+        }
 
-        if(toggleList[0].isOn)
-        {
-            rigidbody2D.velocity = new Vector2(horizontal * Speed, rigidbody2D.velocity.y);
-        }
-        else if(toggleList[1].isOn)
-        {
-            rigidbody2D.AddForce(Vector2.right * horizontal * Speed / 5f);
-        }
-        else if(toggleList[2].isOn)
-        {
-            transform.Translate(Vector3.right * horizontal * Speed/1000f);
-        }
-        else if(toggleList[3].isOn)
-        {
-            rigidbody2D.MovePosition(transform.position + new Vector3(horizontal, 0, 0) * Time.deltaTime * Speed * 10f);
-        }
-        else if(toggleList[4].isOn)
-        {
-            rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(horizontal * Speed, 0f) * Time.fixedDeltaTime);
-        }
+        rigidbody2D.velocity = new Vector2(horizontal * Speed, rigidbody2D.velocity.y);
 
         if(vertical > 0.0f && isGround)
         {
+            animator.SetBool("IsJump", true);
+
             rigidbody2D.AddForce(Vector2.up * JumpPower, ForceMode2D.Impulse); 
             isGround = false;
+            
         }
         else if(vertical < 0.0f && isGround)
         {
+            animator.SetBool("IsCrouch", true);
             Platform.enabled = false;
             isGround = false;   
         }
+        else if(vertical == 0.0f && isGround)
+        {
+            animator.SetBool("IsCrouch", false);
+            animator.SetBool("IsJump", false);  
+        }
+        
     }
     
     void FixedUpdate()
