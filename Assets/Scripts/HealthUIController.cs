@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class HealthUIController : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class HealthUIController : MonoBehaviour
 
     void Start()
     {
-        Health = 70;
         TextValue = GetComponent<Text>();
+        Health = Convert.ToInt32(TextValue.text);
     }
 }

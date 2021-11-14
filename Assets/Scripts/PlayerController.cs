@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -80,6 +81,8 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        Debug.Log(other.gameObject.name);
+
         if(other.gameObject.tag == "Ground" || other.gameObject.tag == "Platform")
         {
             isGround = true;
@@ -93,6 +96,12 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.tag == "Water")
         {
             transform.position = spawn;
+        }
+
+        if(other.gameObject.tag == "Portal")
+        {
+            Debug.Log("Load second level");
+            SceneManager.LoadScene (1);
         }
     }
     
